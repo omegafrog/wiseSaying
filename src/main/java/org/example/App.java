@@ -78,7 +78,11 @@ public class App {
             Map<String, String> parsedParameterMap = getParsedParameterMap(input);
             COMMAND operator = COMMAND.of(parsedParameterMap.get("operator"));
 
-            route(operator, parsedParameterMap, input);
+            try{
+                route(operator, parsedParameterMap, input);
+            }catch (RuntimeException e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 
