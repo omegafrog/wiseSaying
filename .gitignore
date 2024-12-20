@@ -43,4 +43,4 @@ bin/
 .idea/
 gradle/
 build
-db/WiseSaying
+db

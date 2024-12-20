@@ -73,4 +73,5 @@ public class WiseSayingController {
             System.out.println(ws.getId()+" / "+ws.getAuthor()+" / "+ws.getContent());
         System.out.println(page);
     }
+
 }

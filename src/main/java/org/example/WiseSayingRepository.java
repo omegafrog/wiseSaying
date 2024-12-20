@@ -9,6 +9,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.example.JsonUtil.deserialize;
+import static org.example.JsonUtil.serialize;
+
 public class WiseSayingRepository {
 
     private static final String BASE_PATH = "db/wiseSaying/";
@@ -19,7 +22,7 @@ public class WiseSayingRepository {
         int id = getLastId()+1;
         element.setId(id);
 
-        serialize(element, id);
+        serialize(BASE_PATH, element, id);
         return element;
     }
 
@@ -97,7 +100,7 @@ public class WiseSayingRepository {
 
     public void update(int id, WiseSaying wiseSaying) {
         if(!exist(id)) throw new IllegalArgumentException(id+"번 명언은 존재하지 않습니다.");
-        serialize(wiseSaying, id);
+        serialize(BASE_PATH, wiseSaying, id);
     }
 
     public void build() {
@@ -155,60 +158,10 @@ public class WiseSayingRepository {
         bw.write(String.valueOf(id));
         bw.close();
     }
-    private void serialize(WiseSaying element, int id) {
-        String filePath = BASE_PATH + id + ".json";
-        try{
-            File file = new File(filePath);
-            file.createNewFile();
 
-            FileWriter writer = new FileWriter(file);
-            writer.write(toJson(element));
-            writer.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
 
-        String idPath = BASE_PATH+"lastId.txt";
-        File file = new File(idPath);
-        try(FileWriter fw = new FileWriter(file)){
-            fw.write(String.valueOf(id));
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-    private String toJson(WiseSaying e){
-        return "{\n" +
-                "\t\"id\": "+e.getId()+",\n"+
-                "\t\"content\": "+"\""+e.getContent()+"\""+",\n"+
-                "\t\"author\": "+"\""+e.getAuthor()+"\"\n"+
-                "}";
-    }
-    private WiseSaying deserialize(String path) {
-        try{
-            File file = new File(path);
-            try(BufferedReader br = new BufferedReader(new FileReader(file))) {
-                StringBuffer buffer = new StringBuffer();
-                br.lines().forEach(
-                        line -> buffer.append(line).append("\n")
-                );
-                String s = buffer.toString();
-                br.close();
-                return parseJson(s);
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-    private WiseSaying parseJson(String json){
-        String s = json.replaceAll("\t", "")
-                .replaceAll("\n", "");
-        String[] split = s.substring(1, s.length() - 1).split(",");
-        int id = Integer.parseInt(String.valueOf(split[0]).split(":")[1].strip());
-        String content = String.valueOf(split[1]).split(":")[1].strip();
-        String author = String.valueOf(split[2]).split(":")[1].strip();
-        return new WiseSaying(id, content, author);
-    }
+
+
 
 
 }
