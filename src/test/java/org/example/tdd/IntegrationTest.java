@@ -1,7 +1,6 @@
 package org.example.tdd;
 
 import org.example.TestUtil;
-import org.example.tdd.controller.WiseSayingController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +43,7 @@ public class IntegrationTest {
         assertThat(app.isExited()).isTrue();
     }
     @Test
-    void 명언을_등록할_수_있다() throws FileNotFoundException {
+    void 명언을_등록할_수_있다()  {
         prepare("""
                 등록
                 현재를 사랑하라
@@ -280,7 +279,8 @@ public class IntegrationTest {
                         \t\t"content": "과거에 집착하지 마라.",
                         \t\t"author": "작자미상"
                         \t}
-                        ]""");
+                        ]
+                        """);
     }
 
 

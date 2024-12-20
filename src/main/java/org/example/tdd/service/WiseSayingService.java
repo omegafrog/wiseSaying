@@ -34,4 +34,8 @@ public class WiseSayingService {
     public void update(long id, WiseSaying wiseSaying) {
         repository.update(id, wiseSaying);
     }
+
+    public void build() {
+        repository.build();
+    }
 }

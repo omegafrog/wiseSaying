@@ -64,4 +64,9 @@ public class WiseSayingController {
         wiseSaying.update(changedContent, changedAuthor);
         service.update(id, wiseSaying);
     }
+
+    public void build() {
+        service.build();
+        System.out.println("data.json 파일의 내용이 갱신되었습니다.");
+    }
 }

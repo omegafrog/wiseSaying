@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import static org.example.tdd.App.BASE_PATH;
 
 public class JsonUtil {
-    private static WiseSaying parseJson(String json){
+    public static WiseSaying parseJson(String json){
         String s = json.replaceAll("\t", "")
                 .replaceAll("\n", "");
         String[] split = s.substring(1, s.length() - 1).split(",");
