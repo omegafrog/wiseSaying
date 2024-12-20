@@ -87,7 +87,11 @@ public class App {
                 return;
             }
             String input = scanner.nextLine();
-            route(input);
+            try{
+                route(input);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
     private void route(String input){
