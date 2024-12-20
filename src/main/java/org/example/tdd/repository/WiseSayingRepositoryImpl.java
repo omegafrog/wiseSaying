@@ -17,7 +17,7 @@ import static org.example.tdd.App.BASE_PATH;
 public class WiseSayingRepositoryImpl implements WiseSayingRepository {
     private static final WiseSayingRepositoryImpl INSTANCE = new WiseSayingRepositoryImpl();
     public static WiseSayingRepository getInstance() {
-        return (WiseSayingRepository) INSTANCE;
+        return INSTANCE;
     }
 
     private WiseSayingRepositoryImpl() {
@@ -37,7 +37,9 @@ public class WiseSayingRepositoryImpl implements WiseSayingRepository {
 
     @Override
     public WiseSaying findById(long id) {
-        return null;
+        if(!existsById(id))
+            throw new EntityNotFoundException(id+"번 명언은 존재하지 않습니다.");
+        return JsonUtil.deserialize(BASE_PATH +"/"+ id + ".json");
     }
 
     @Override
@@ -64,6 +66,15 @@ public class WiseSayingRepositoryImpl implements WiseSayingRepository {
 
     @Override
     public WiseSaying update(long id, WiseSaying wiseSaying) {
-        return null;
+        if(!existsById(id))
+            throw new EntityNotFoundException(id + "번 명언이 존재하지 않습니다.");
+        JsonUtil.serialize(BASE_PATH, wiseSaying, id);
+        return wiseSaying;
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        File file = new File(BASE_PATH +"/"+ id+  ".json");
+        return file.exists();
     }
 }

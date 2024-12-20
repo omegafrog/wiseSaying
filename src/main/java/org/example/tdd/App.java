@@ -102,6 +102,7 @@ public class App {
             case "등록" -> controller.create();
             case "목록" -> controller.list();
             case "삭제" -> controller.delete(Long.parseLong(parameterMap.get(PARAMETERS.ID.value)));
+            case "수정" -> controller.update(Long.parseLong(parameterMap.get(PARAMETERS.ID.value)));
             default -> throw new UnsupportedCommandException();
         }
     }

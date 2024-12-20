@@ -31,4 +31,10 @@ public class WiseSaying {
     public String getAuthor() {
         return author;
     }
+
+    public WiseSaying update(String changedContent, String changedAuthor) {
+        this.content = changedContent;
+        this.author = changedAuthor;
+        return this;
+    }
 }

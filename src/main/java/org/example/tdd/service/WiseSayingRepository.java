@@ -17,4 +17,5 @@ public interface WiseSayingRepository {
 
     WiseSaying update(long id, WiseSaying wiseSaying);
 
+    boolean existsById(long id);
 }

@@ -27,4 +27,11 @@ public class WiseSayingService {
     public void delete(long id){
         repository.deleteById(id);
     }
+    public WiseSaying findById(long id){
+        return repository.findById(id);
+    }
+
+    public void update(long id, WiseSaying wiseSaying) {
+        repository.update(id, wiseSaying);
+    }
 }

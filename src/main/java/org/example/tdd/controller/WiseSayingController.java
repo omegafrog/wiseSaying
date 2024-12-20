@@ -50,4 +50,18 @@ public class WiseSayingController {
         service.delete(id);
         System.out.println(id+"번 명언이 삭제되었습니다.");
     }
+
+    public void update(long id) {
+        WiseSaying wiseSaying = service.findById(id);
+        System.out.println("명언(기존) : "+wiseSaying.getContent() );
+        System.out.print("명언 : ");
+        String changedContent = scanner.nextLine();
+
+        System.out.println("작가(기존) : "+wiseSaying.getAuthor() );
+        System.out.print("작가 : ");
+        String changedAuthor = scanner.nextLine();
+
+        wiseSaying.update(changedContent, changedAuthor);
+        service.update(id, wiseSaying);
+    }
 }
