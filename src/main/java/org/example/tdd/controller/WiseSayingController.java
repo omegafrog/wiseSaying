@@ -4,6 +4,7 @@ package org.example.tdd.controller;
 import org.example.tdd.entity.WiseSaying;
 import org.example.tdd.service.WiseSayingService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class WiseSayingController {
@@ -32,4 +33,21 @@ public class WiseSayingController {
         System.out.println(saved.getId() + "번 명언이 등록되었습니다.");
     }
 
+    public void list() {
+        printResult(service.findAll());
+    }
+
+    private static void printResult(List<WiseSaying> all) {
+        System.out.println("번호 / 작가 / 명언");
+        System.out.println("----------------------");
+
+        for (WiseSaying ws : all)
+            System.out.println(ws.getId()+" / "+ws.getAuthor()+" / "+ws.getContent());
+//        System.out.println(page);
+    }
+
+    public void delete(long id) {
+        service.delete(id);
+        System.out.println(id+"번 명언이 삭제되었습니다.");
+    }
 }

@@ -3,6 +3,7 @@ package org.example.tdd.service;
 import org.example.tdd.entity.WiseSaying;
 import org.example.tdd.repository.WiseSayingRepositoryImpl;
 
+import java.util.List;
 
 
 public class WiseSayingService {
@@ -17,5 +18,13 @@ public class WiseSayingService {
 
     public WiseSaying create(String content, String author) {
         return repository.insert(new WiseSaying(content, author));
+    }
+
+    public List<WiseSaying> findAll() {
+        return repository.findAll();
+    }
+
+    public void delete(long id){
+        repository.deleteById(id);
     }
 }

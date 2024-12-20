@@ -13,8 +13,8 @@ public class JsonUtil {
                 .replaceAll("\n", "");
         String[] split = s.substring(1, s.length() - 1).split(",");
         long id = Long.parseLong(String.valueOf(split[0]).split(":")[1].strip());
-        String content = String.valueOf(split[1]).split(":")[1].strip();
-        String author = String.valueOf(split[2]).split(":")[1].strip();
+        String content = String.valueOf(split[1]).split(":")[1].strip().replaceAll("\"", "");
+        String author = String.valueOf(split[2]).split(":")[1].strip().replaceAll("\"", "");
         return new WiseSaying(id, content, author);
     }
     public static WiseSaying deserialize(String path) {
