@@ -1,6 +1,5 @@
 package org.example;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Page {
@@ -8,9 +7,8 @@ public class Page {
     private final List<WiseSaying> contents;
     private final int pageSize;
     private final int totalElementCount;
-    private int pageNum;
+    private final int pageNum;
     private final int totalPage;
-
 
     public Page(List<WiseSaying> contents, int totalElementCount, int pageSize, int pageNum) {
         this.totalElementCount = totalElementCount;
@@ -27,6 +25,7 @@ public class Page {
             this.totalPage = 1;
         }
         this.pageNum = pageNum;
+
     }
 
     public List<WiseSaying> getContents() {
@@ -35,11 +34,11 @@ public class Page {
 
 
     public String toString(){
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("페이지 : ");
         for(int i = 1; i <= totalPage; i+=1){
             if(i==pageNum)
-                sb.append("["+i+"]");
+                sb.append("[").append(i).append("]");
             else
                 sb.append(i);
             if(i<totalPage)

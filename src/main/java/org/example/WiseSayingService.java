@@ -17,6 +17,12 @@ public class WiseSayingService {
     public List<WiseSaying> findAll() {
         return repository.findAll();
     }
+    public Page findAllByPage(int pageNum) {
+        List<WiseSaying> res = repository.findAll();
+        int fromIdx = (pageNum-1)*5;
+        int toIdx = Math.min((pageNum) * 5,res.size());
+        return new Page(res.subList(fromIdx, toIdx), res.size(), 5, pageNum);
+    }
 
     public void remove(int id) {
         repository.remove(id);
@@ -36,5 +42,11 @@ public class WiseSayingService {
 
     public List<WiseSaying> findBy(String type, String word) {
         return repository.findBy(type, word);
+    }
+    public Page findByPage(String type, String word, int pageNum){
+        List<WiseSaying> res = repository.findBy(type, word);
+        int fromIdx = (pageNum-1)*5;
+        int toIdx = Math.min((pageNum) * 5,res.size());
+        return new Page(res.subList(fromIdx, toIdx), res.size(), 5, pageNum);
     }
 }

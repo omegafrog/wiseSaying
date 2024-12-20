@@ -1,7 +1,6 @@
 package org.example;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,15 +12,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
     private ByteArrayOutputStream outputStream;
     @BeforeEach
     void setUp() throws IOException {
-        Stream<Path> list = Files.list(Path.of("db/WiseSaying"));
-        list.forEach(file -> file.toFile().delete());
-        outputStream = TestUtil.setOutToByteArray();
+        try(Stream<Path> list = Files.list(Path.of("db/WiseSaying"))){
+            list.forEach(file -> file.toFile().delete());
+            outputStream = TestUtil.setOutToByteArray();
+        }
     }
     @AfterEach
     void tearDown() {
@@ -51,12 +50,8 @@ class AppTest {
         String no1 = "1";
         String content1 = "\"너 자신을 알라\"";
         String author1 = "\"플라톤\"";
-        Scanner scanner = TestUtil.genScanner("""
-                등록
-                너 자신을 알라
-                플라톤
-                목록
-                """);
+        Scanner scanner = TestUtil.genScanner("등록\n너 자신을 알라\n플라톤\n목록\n");
+
         WiseSayingRepository repository = new WiseSayingRepository();
         WiseSayingService service = new WiseSayingService(repository);
         WiseSayingController controller = new WiseSayingController(scanner, service);
