@@ -5,6 +5,8 @@ import org.example.tdd.entity.WiseSaying;
 import java.util.List;
 
 public interface WiseSayingRepository {
+
+
     WiseSaying insert(WiseSaying wiseSaying);
 
     WiseSaying findById(long id);

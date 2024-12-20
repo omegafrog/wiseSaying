@@ -7,28 +7,34 @@ import java.util.Scanner;
 
 public class App {
     private final Scanner scanner;
-    private boolean isExited = false;
+    private static boolean isExited = false;
     private final WiseSayingController controller;
 
-    void exit(){
+    public static final String BASE_PATH = "db/WiseSaying";
+
+    static void exit(){
         isExited = true;
+        System.out.flush();
+    }
+
+    public App(Scanner scanner) {
+        this.scanner = scanner;
+        controller = WiseSayingController.getInstance();
+        controller.setScanner(scanner);
     }
 
     public boolean isExited() {
         return isExited;
     }
 
-    public App(Scanner scanner, WiseSayingController controller) {
-        this.scanner = scanner;
-        this.controller = controller;
-    }
-
     public void run(){
         System.out.println("== 명언 앱 == ");
         while(true){
             System.out.print("명령) ");
-            if(!scanner.hasNext())
+            if(!scanner.hasNext()){
+                System.out.flush();
                 return;
+            }
             String input = scanner.nextLine();
             route(input);
         }
@@ -36,6 +42,7 @@ public class App {
     private void route(String input){
         switch (input){
             case "종료" -> exit();
+            case "등록" -> controller.create();
             default -> throw new UnsupportedCommandException();
         }
     }

@@ -38,7 +38,7 @@ public class IntegrationTest {
     @Test
     void 종료_명령을_실행할_수_있어야_한다(){
         Scanner scanner = TestUtil.genScanner("종료");
-        App app = new App(scanner, WiseSayingController.getInstance());
+        App app = new App(scanner);
         app.run();
 
         assertThat(app.isExited()).isTrue();
@@ -59,14 +59,16 @@ public class IntegrationTest {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
         assertThat(files).isNotEmpty();
 
-        BufferedReader reader = new BufferedReader(new FileReader(files.get(0)));
-        assertThat(reader.lines())
-                .contains("현재를 사랑하라")
-                .contains("작자미상");
-
+        try(BufferedReader reader = new BufferedReader(new FileReader(files.get(0)))){
+            Stream<String> lines = reader.lines();
+            assertThat(lines)
+                    .anyMatch(line -> line.contains("현재를 사랑하라"))
+                    .anyMatch(line -> line.contains("작자미상"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -206,8 +208,8 @@ public class IntegrationTest {
 
         try(BufferedReader reader = new BufferedReader(new FileReader(updatedFile.get()))){
             assertThat(reader.lines())
-                    .contains("현재와 자신을 사랑하라.")
-                    .contains("홍길동");
+                    .anyMatch(line -> line.contains("현재와 자신을 사랑하라."))
+                    .anyMatch(line -> line.contains("홍길동"));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -283,8 +285,8 @@ public class IntegrationTest {
 
 
     private static void prepare(String input){
-        Scanner scanner = TestUtil.genScanner("종료");
-        App app = new App(scanner, WiseSayingController.getInstance());
+        Scanner scanner = TestUtil.genScanner(input);
+        App app = new App(scanner);
         app.run();
     }
 }

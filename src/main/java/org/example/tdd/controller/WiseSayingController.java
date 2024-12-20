@@ -1,12 +1,35 @@
 package org.example.tdd.controller;
 
 
+import org.example.tdd.entity.WiseSaying;
+import org.example.tdd.service.WiseSayingService;
+
+import java.util.Scanner;
+
 public class WiseSayingController {
     private static final WiseSayingController INSTANCE = new WiseSayingController();
     private WiseSayingController() {}
+    private Scanner scanner;
+
+    private final WiseSayingService service = WiseSayingService.getInstance();
 
     public static WiseSayingController getInstance() {
         return INSTANCE;
+    }
+
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public void create() {
+        System.out.print("명언 : ");
+        String content = scanner.nextLine();
+
+        System.out.print("작가 : ");
+        String author = scanner.nextLine();
+
+        WiseSaying saved = service.create(content, author);
+        System.out.println(saved.getId() + "번 명언이 등록되었습니다.");
     }
 
 }
