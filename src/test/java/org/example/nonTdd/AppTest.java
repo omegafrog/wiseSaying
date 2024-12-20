@@ -1,5 +1,6 @@
-package org.example;
+package org.example.nonTdd;
 
+import org.example.TestUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

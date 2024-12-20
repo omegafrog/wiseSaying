@@ -1,4 +1,4 @@
-package org.example;
+package org.example.nonTdd;
 
 import java.util.HashMap;
 import java.util.Map;
