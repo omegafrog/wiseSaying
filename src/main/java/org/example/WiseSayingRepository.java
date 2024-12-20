@@ -27,26 +27,18 @@ public class WiseSayingRepository {
         List<WiseSaying> quotes = new ArrayList<>();
 
         try(Stream<Path> paths = Files.list(Paths.get(BASE_PATH))){
-            List<Path> list = paths.toList();
-            for(Path path : list){
-                if(path.toString().endsWith(".json") && !path.toString().endsWith("build.json")){
-                    quotes.add(deserialize(path.toString()));
-                }
-            }
+            getEntityFilePathList(paths).forEach(path -> quotes.add(deserialize(path.toString())));
         }catch (IOException e){}
         return quotes;
     }
 
+    @Deprecated
     public List<WiseSaying> findAll(int pageNum) {
         List<WiseSaying> quotes = new ArrayList<>();
 
         try(Stream<Path> paths = Files.list(Paths.get(BASE_PATH))){
-            List<Path> list = paths.toList();
-            for(Path path : list){
-                if(path.toString().endsWith(".json") && !path.toString().endsWith("build.json")){
-                    quotes.add(deserialize(path.toString()));
-                }
-            }
+            getEntityFilePathList(paths)
+                    .forEach(path -> quotes.add(deserialize(path.toString())));
         }catch (IOException e){}
         quotes.sort(new Comparator<WiseSaying>() {
             @Override
@@ -57,6 +49,13 @@ public class WiseSayingRepository {
         int fromIdx = pageNum*5;
         int toIdx = (pageNum+1)*5<quotes.size()?pageNum+1:quotes.size()-1;
         return quotes.subList(fromIdx, toIdx);
+    }
+
+    private List<Path> getEntityFilePathList(Stream<Path> paths) {
+        List<Path> list = paths.toList();
+        return list.stream()
+                .filter(path -> path.toString().endsWith(".json") && !path.toString().endsWith("build.json"))
+                .toList();
     }
 
     private static int getLastId() {
@@ -105,38 +104,30 @@ public class WiseSayingRepository {
         // 빌드 파일 객체 생성
         File file = new File(BASE_PATH + "build.json");
         // 빌드 파일 객체 writer 생성
-        try(FileWriter buildFileWriter = new FileWriter(file)){
-            buildFileWriter.write("[\n");
+        try(FileWriter resultFileWriter = new FileWriter(file)){
+            resultFileWriter.write("[\n");
             // 디렉토리 내부 파일명 모두 파싱
             try(Stream<Path> paths = Files.list(Paths.get(BASE_PATH))){
-                List<Path> list = paths.filter(
-                        path -> path.toString().endsWith(".json") && !path.toString().endsWith("build.json")
-                ).toList();
                 // 파일명이 .json으로 끝나고 build.json이 아닌 파일들의 내용을 모두 빌드 파일 객체 writer에 씀
-                for(int i = 0; i < list.size(); i++){
-                    Path path = list.get(i);
-                    File entityFile = new File(path.toString());
-                    StringBuffer buffer = new StringBuffer();
-
-                    try(BufferedReader entityReaderBuffer = new BufferedReader(new FileReader(entityFile))){
+                StringBuilder builder = new StringBuilder();
+                for(Path validPath : getEntityFilePathList(paths)){
+                    try(BufferedReader entityReaderBuffer = new BufferedReader(new FileReader(validPath.toFile()))){
                         entityReaderBuffer.lines().forEach(line -> {
-                            buffer.append("\t").append(line);
-                            if(!line.equals("}"))
-                                    buffer.append("\n");
+                            builder.append("\t").append(line);
+                            builder.append("\n");
                         });
+                        builder.deleteCharAt(builder.length()-1);
                     }
-                    if(i<list.size()-1)
-                        buffer.append(",");
-                    buffer.append("\n");
-                    buildFileWriter.write(buffer.toString());
+                    builder.append(",\n");
                 }
+                builder.delete(builder.length()-2, builder.length()-1);
+                resultFileWriter.write(builder.toString());
             }
-            buildFileWriter.write("]");
+            resultFileWriter.write("]");
         }catch (IOException e){
             e.printStackTrace();
         }
     }
-
 
     public List<WiseSaying> findBy(String type, String word) {
         return findAll().stream().filter(
