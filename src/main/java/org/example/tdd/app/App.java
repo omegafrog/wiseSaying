@@ -19,7 +19,7 @@ public class App {
     public App(Scanner scanner) {
         this.scanner = scanner;
         wiseSayingController = WiseSayingController.getInstance();
-        systemController = new SystemController();
+        systemController = SystemController.getInstance();
         router = new Router(systemController,wiseSayingController);
         wiseSayingController.setScanner(scanner);
     }

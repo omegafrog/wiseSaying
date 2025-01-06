@@ -3,7 +3,7 @@ package org.example.tdd.app.domain.wiseSaying.controller;
 
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import org.example.tdd.app.domain.wiseSaying.service.WiseSayingService;
-import org.example.tdd.app.global.Command;
+import org.example.tdd.app.global.Controller;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import static org.example.tdd.app.global.Parameters.*;
 
-public class WiseSayingController {
+public class WiseSayingController implements Controller {
     private static final WiseSayingController INSTANCE = new WiseSayingController();
     private WiseSayingController() {}
     private Scanner scanner;
@@ -40,8 +40,7 @@ public class WiseSayingController {
     public void list() {
         printResult(service.findAll());
     }
-    public void list(Command command){
-        Map<String, String> parameterMap = command.params;
+    public void list(Map<String, String> parameterMap){
         List<WiseSaying> wiseSayingList = service.search(parameterMap.get(KEYWORD_TYPE),
                 parameterMap.get(KEYWORD),
                 Integer.parseInt(parameterMap.get(PAGE_NUM)));
@@ -57,16 +56,14 @@ public class WiseSayingController {
 //        System.out.println(page);
     }
 
-    public void delete(Command command) {
-        Map<String, String> params = command.params;
-        Long id = Long.parseLong(params.get(ID));
+    public void delete(Map<String, String> parameterMap) {
+        Long id = Long.parseLong(parameterMap.get(ID));
         service.delete(id);
         System.out.println(id + "번 명언이 삭제되었습니다.");
     }
 
-    public void update(Command command) {
-        Map<String, String> params = command.params;
-        Long id = Long.parseLong(params.get(ID));
+    public void update(Map<String, String> parameterMap) {
+        Long id = Long.parseLong(parameterMap.get(ID));
         WiseSaying wiseSaying = service.getItem(id);
         System.out.println("명언(기존) : "+wiseSaying.getContent() );
         System.out.print("명언 : ");

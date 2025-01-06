@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.example.tdd.app.global.Parameters.*;
-import static org.example.tdd.app.global.Command.*;
 
 public  class Router {
 
@@ -21,24 +20,30 @@ public  class Router {
     }
 
     public void route(String input){
-        Command command = new Command(input);
-        COMMAND operator =COMMAND.of(command.commandName);
-        Map<String, String> params = command.params;
-        switch (operator){
-            case EXIT -> systemController.exit();
-            case CREATE-> wiseSayingController.create();
-            case LIST -> {
-                if(params.containsKey(KEYWORD_TYPE)) {
-                    wiseSayingController.list(command);
-                    break;
-                }
-                wiseSayingController.list();
-            }
-            case DELETE -> wiseSayingController.delete(command);
-            case UPDATE -> wiseSayingController.update(command);
-            case BUILD -> wiseSayingController.build();
-            default -> throw new UnsupportedCommandException();
-        }
+        Map<String, String> parameterMap = getParameterMap(input);
+        COMMAND operator =COMMAND.of(parameterMap.get("operator"));
+        operator.route(parameterMap);
+    }
+    private Map<String, String> getParameterMap(String input){
+        Map<String, String> params = new HashMap<>();
+        params.put(PAGE_NUM, "1");
+
+        String[] split = input.split(OPERATOR_SPLITTER);
+
+        String commandName = split[0];
+        params.put("operator", commandName);
+        String parameter = split.length == 2?split[1]:"";
+
+
+        if(parameter.isEmpty())
+            return params;
+        String[] parsedParams = parameter.split(PARAMETER_SPLITTER);
+
+        for(String param : parsedParams)
+            params.put(param.split(PARAMETER_VALUE_SPLITTER)[0],
+                    param.split(PARAMETER_VALUE_SPLITTER)[1]);
+
+        return params;
     }
 
 
