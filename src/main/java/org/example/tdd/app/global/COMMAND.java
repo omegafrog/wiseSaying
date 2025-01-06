@@ -3,6 +3,8 @@ package org.example.tdd.app.global;
 import org.example.tdd.app.domain.wiseSaying.controller.WiseSayingController;
 
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public enum COMMAND{
     EXIT("종료"){
@@ -43,18 +45,14 @@ public enum COMMAND{
     }
 
     public abstract void route(Map<String, String> parameterMap);
-
-    static COMMAND of(String name){
-        return switch (name) {
-            case "등록" -> COMMAND.CREATE;
-            case "종료" -> COMMAND.EXIT;
-            case "목록" -> COMMAND.LIST;
-            case "수정" -> COMMAND.UPDATE;
-            case "빌드" -> COMMAND.BUILD;
-            case "삭제" -> COMMAND.DELETE;
-            default -> throw new IllegalArgumentException("Unknown command: " + name);
-        };
+    private static Map<String, COMMAND> COMMAND_MAP;
+    static{
+        COMMAND_MAP = Stream.of(values())
+                .collect(Collectors.toMap(command -> command.name, command -> command));
     }
 
+    static COMMAND of(String name){
+        return COMMAND_MAP.getOrDefault(name, COMMAND.EXIT);
+    }
 }
 
