@@ -20,4 +20,6 @@ public interface WiseSayingRepository {
     boolean existsById(long id);
 
     void build();
+
+    List<WiseSaying> findByPage(String keywordType, String keyword, int pageNum);
 }

@@ -27,7 +27,7 @@ public class WiseSayingService {
     public void delete(long id){
         repository.deleteById(id);
     }
-    public WiseSaying findById(long id){
+    public WiseSaying getItem(long id){
         return repository.findById(id);
     }
 
@@ -37,5 +37,9 @@ public class WiseSayingService {
 
     public void build() {
         repository.build();
+    }
+
+    public List<WiseSaying> search(String keywordType, String keyword, int pageNum) {
+        return repository.findByPage(keywordType,keyword,pageNum);
     }
 }

@@ -240,7 +240,28 @@ public class IntegrationTest {
         }
         assertThat(id).isEqualTo(2);
     }
+    @Test
+    void searchTest(){
+        prepare("""
+                등록
+                명언검색어1
+                저자검색어1
+                등록
+                명언검색어2
+                저자검색어1
+                등록
+                명언검색어1
+                저자검색어2
+                등록
+                명언검색어2
+                저자검색어2
+                목록?keywordType=content&keyword=명언검색어1
+                """);
 
+        assertThat(outputStream.toString())
+                .contains("3 / 저자검색어2 / 명언검색어1")
+                .contains("1 / 저자검색어1 / 명언검색어1");
+    }
     @Test
     void data_파일을_빌드할_수_있어야_한다(){
         prepare("""
