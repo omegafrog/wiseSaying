@@ -1,22 +1,14 @@
-package org.example.tdd;
+package org.example.tdd.app.global;
 
-import org.example.tdd.controller.WiseSayingController;
-import org.example.tdd.exception.UnsupportedCommandException;
+import org.example.tdd.app.domain.wiseSaying.controller.WiseSayingController;
+import org.example.tdd.app.common.exception.UnsupportedCommandException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
+import static org.example.tdd.app.global.Router.PARAMETERS.*;
 
-
-public class App {
-    private final Scanner scanner;
-    private static boolean isExited = false;
-    private final WiseSayingController controller;
-
-    public static final String BASE_PATH = "db/WiseSaying";
-
-
+public  class Router {
     private enum COMMAND{
         EXIT("종료"),
         CREATE("등록"),
@@ -25,7 +17,7 @@ public class App {
         UPDATE("수정"),
         BUILD("빌드")
         ;
-        String name;
+        final String name;
         COMMAND(String name) {
             this.name = name;
         }
@@ -63,58 +55,33 @@ public class App {
         }
     }
 
-    static void exit(){
-        isExited = true;
-        System.out.flush();
+    private final SystemController systemController;
+    private final WiseSayingController wiseSayingController;
+
+    public Router(SystemController systemController, WiseSayingController wiseSayingController) {
+        this.systemController = systemController;
+        this.wiseSayingController = wiseSayingController;
     }
 
-    public App(Scanner scanner) {
-        this.scanner = scanner;
-        controller = WiseSayingController.getInstance();
-        controller.setScanner(scanner);
-    }
-
-    public boolean isExited() {
-        return isExited;
-    }
-
-    public void run(){
-        System.out.println("== 명언 앱 == ");
-        while(true){
-            System.out.print("명령) ");
-            if(!scanner.hasNext()){
-                System.out.flush();
-                return;
-            }
-            String input = scanner.nextLine();
-            try{
-                route(input);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-    private void route(String input){
+    public void route(String input){
         Map<String, String> parameterMap = getParsedParameterMap(input);
-        String operator = parameterMap.get("operator");
+        COMMAND operator = COMMAND.of(parameterMap.get("operator"));
         switch (operator){
-            case "종료" -> exit();
-            case "등록" -> controller.create();
-            case "목록" -> controller.list();
-            case "삭제" -> controller.delete(Long.parseLong(parameterMap.get(PARAMETERS.ID.value)));
-            case "수정" -> controller.update(Long.parseLong(parameterMap.get(PARAMETERS.ID.value)));
-            case "빌드" -> controller.build();
+            case EXIT -> systemController.exit();
+            case CREATE-> wiseSayingController.create();
+            case LIST -> wiseSayingController.list();
+            case DELETE -> wiseSayingController.delete(Long.parseLong(parameterMap.get(ID.value)));
+            case UPDATE -> wiseSayingController.update(Long.parseLong(parameterMap.get(ID.value)));
+            case BUILD -> wiseSayingController.build();
             default -> throw new UnsupportedCommandException();
         }
     }
 
-
     private static Map<String, String> getParsedParameterMap(String input){
         Map<String, String> parameterMap = new HashMap<>();
-        parameterMap.put(PARAMETERS.PAGE_NUM.value, "1");
+        parameterMap.put(PAGE_NUM.value, "1");
 
-
-        String[] split = input.split(PARAMETERS.OPERATOR_SPLITTER.value);
+        String[] split = input.split(OPERATOR_SPLITTER.value);
         String operator = split[0];
         parameterMap.put("operator",operator);
 
@@ -122,12 +89,12 @@ public class App {
 
         if(parameter.isEmpty())
             return parameterMap;
-        String[] parsedParams = parameter.split(PARAMETERS.PARAMETER_SPLITTER.value);
+        String[] parsedParams = parameter.split(PARAMETER_SPLITTER.value);
 
         for(String param : parsedParams)
             parameterMap.put(param.split(
-                            PARAMETERS.PARAMETER_VALUE_SPLITTER.value)[0],
-                    param.split(PARAMETERS.PARAMETER_VALUE_SPLITTER.value)[1]);
+                            PARAMETER_VALUE_SPLITTER.value)[0],
+                    param.split(PARAMETER_VALUE_SPLITTER.value)[1]);
 
         return parameterMap;
     }

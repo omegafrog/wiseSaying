@@ -1,8 +1,8 @@
-package org.example.tdd.controller;
+package org.example.tdd.app.domain.wiseSaying.controller;
 
 
-import org.example.tdd.entity.WiseSaying;
-import org.example.tdd.service.WiseSayingService;
+import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
+import org.example.tdd.app.domain.wiseSaying.service.WiseSayingService;
 
 import java.util.List;
 import java.util.Scanner;

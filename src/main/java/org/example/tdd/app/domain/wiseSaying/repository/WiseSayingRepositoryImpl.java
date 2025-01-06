@@ -1,9 +1,9 @@
-package org.example.tdd.repository;
+package org.example.tdd.app.domain.wiseSaying.repository;
 
 import org.example.tdd.JsonUtil;
-import org.example.tdd.entity.WiseSaying;
-import org.example.tdd.exception.EntityNotFoundException;
-import org.example.tdd.service.WiseSayingRepository;
+import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
+import org.example.tdd.app.common.exception.EntityNotFoundException;
+import org.example.tdd.app.domain.wiseSaying.service.WiseSayingRepository;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.example.tdd.App.BASE_PATH;
+import static org.example.tdd.app.App.BASE_PATH;
 
 public class WiseSayingRepositoryImpl implements WiseSayingRepository {
     private static final WiseSayingRepositoryImpl INSTANCE = new WiseSayingRepositoryImpl();

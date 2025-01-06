@@ -1,4 +1,4 @@
-package org.example.tdd.entity;
+package org.example.tdd.app.domain.wiseSaying.entity;
 
 public class WiseSaying {
     private long id;

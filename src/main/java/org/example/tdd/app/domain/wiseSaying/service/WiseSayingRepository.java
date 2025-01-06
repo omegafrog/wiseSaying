@@ -1,6 +1,6 @@
-package org.example.tdd.service;
+package org.example.tdd.app.domain.wiseSaying.service;
 
-import org.example.tdd.entity.WiseSaying;
+import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 
 import java.util.List;
 

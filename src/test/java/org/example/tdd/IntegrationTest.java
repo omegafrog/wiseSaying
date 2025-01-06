@@ -1,6 +1,7 @@
 package org.example.tdd;
 
 import org.example.TestUtil;
+import org.example.tdd.app.App;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ public class IntegrationTest {
         App app = new App(scanner);
         app.run();
 
-        assertThat(app.isExited()).isTrue();
+        assertThat(app.isExisted()).isTrue();
     }
     @Test
     void 명언을_등록할_수_있다()  {

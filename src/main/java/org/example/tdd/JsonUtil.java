@@ -1,11 +1,11 @@
 package org.example.tdd;
 
-import org.example.tdd.entity.WiseSaying;
+import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 
 import java.io.*;
 import java.nio.file.Files;
 
-import static org.example.tdd.App.BASE_PATH;
+import static org.example.tdd.app.App.BASE_PATH;
 
 public class JsonUtil {
     public static WiseSaying parseJson(String json){

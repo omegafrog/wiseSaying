@@ -1,7 +1,7 @@
-package org.example.tdd.service;
+package org.example.tdd.app.domain.wiseSaying.service;
 
-import org.example.tdd.entity.WiseSaying;
-import org.example.tdd.repository.WiseSayingRepositoryImpl;
+import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
+import org.example.tdd.app.domain.wiseSaying.repository.WiseSayingRepositoryImpl;
 
 import java.util.List;
 
