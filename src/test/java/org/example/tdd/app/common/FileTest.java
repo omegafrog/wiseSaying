@@ -5,14 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class UtilTest {
+class FileTest {
     @BeforeEach
     void setUP() {
         if(Files.exists(Path.of("test.txt")))
