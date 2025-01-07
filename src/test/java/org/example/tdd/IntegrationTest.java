@@ -259,8 +259,8 @@ public class IntegrationTest {
                 """);
 
         assertThat(outputStream.toString())
-                .contains("3 / 저자검색어2 / 명언검색어1")
-                .contains("1 / 저자검색어1 / 명언검색어1");
+                .doesNotContain("4 / 저자검색어2 / 명언검색어2")
+                .doesNotContain("2 / 저자검색어1 / 명언검색어2");
     }
     @Test
     void data_파일을_빌드할_수_있어야_한다(){

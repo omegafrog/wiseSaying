@@ -3,15 +3,13 @@ package org.example.tdd.app.domain.wiseSaying.controller;
 
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import org.example.tdd.app.domain.wiseSaying.service.WiseSayingService;
-import org.example.tdd.app.global.Controller;
+import org.example.tdd.app.global.Parameters;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
-import static org.example.tdd.app.global.Parameters.*;
 
-public class WiseSayingController implements Controller {
+public class WiseSayingController{
     private static final WiseSayingController INSTANCE = new WiseSayingController();
     private WiseSayingController() {}
     private Scanner scanner;
@@ -40,10 +38,9 @@ public class WiseSayingController implements Controller {
     public void list() {
         printResult(service.findAll());
     }
-    public void list(Map<String, String> parameterMap){
-        List<WiseSaying> wiseSayingList = service.search(parameterMap.get(KEYWORD_TYPE),
-                parameterMap.get(KEYWORD),
-                Integer.parseInt(parameterMap.get(PAGE_NUM)));
+    public void list(Parameters parameters){
+        List<WiseSaying> wiseSayingList = service.search(parameters.getKeywordType(),
+                parameters.getKeyword(), parameters.getPageNum());
         printResult(wiseSayingList);
     }
 
@@ -56,14 +53,14 @@ public class WiseSayingController implements Controller {
 //        System.out.println(page);
     }
 
-    public void delete(Map<String, String> parameterMap) {
-        Long id = Long.parseLong(parameterMap.get(ID));
+    public void delete(Parameters parameters) {
+        Long id = parameters.getId();
         service.delete(id);
         System.out.println(id + "번 명언이 삭제되었습니다.");
     }
 
-    public void update(Map<String, String> parameterMap) {
-        Long id = Long.parseLong(parameterMap.get(ID));
+    public void update(Parameters parameters) {
+        Long id = parameters.getId();
         WiseSaying wiseSaying = service.getItem(id);
         System.out.println("명언(기존) : "+wiseSaying.getContent() );
         System.out.print("명언 : ");

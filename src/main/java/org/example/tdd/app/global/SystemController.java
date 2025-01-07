@@ -1,6 +1,6 @@
 package org.example.tdd.app.global;
 
-public class SystemController implements ISystemController {
+public class SystemController{
     private static final SystemController INSTANCE = new SystemController();
 
     public static SystemController getInstance(){
