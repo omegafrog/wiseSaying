@@ -5,8 +5,11 @@ import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static org.example.tdd.app.App.BASE_PATH;
 
@@ -115,6 +118,63 @@ public class Util {
 
         public static void writeAsMap(String fileName, LinkedHashMap<String, Object> map) {
             File.write(fileName, mapToJson(map));
+        }
+
+        public static Map<String, Object> readAsMap(String s) {
+            Map<String, Object> res = new LinkedHashMap<>();
+            s = s.substring(1, s.length() - 1).trim();
+
+            int bracketCount = 0;
+            int braceCount = 0;
+            List<String> entry = new ArrayList<>();
+            StringBuilder builder = new StringBuilder();
+            for (char c : s.toCharArray()) {
+                if(c == '{')
+                    braceCount++;
+                if(c == '}')
+                    braceCount--;
+                if(c == '[')
+                    bracketCount++;
+                if(c == ']')
+                    bracketCount--;
+                if(braceCount == 0 && bracketCount == 0 && c==','){
+                    entry.add(builder.toString());
+                    builder.setLength(0);
+                }else builder.append(c);
+            }
+            entry.add(builder.toString());
+            Pattern DIGIT = Pattern.compile("\\d+");
+
+            for (String keyValue:entry){
+                keyValue = keyValue.replaceAll("\"","").trim();
+                String key = keyValue.split(":")[0].trim();
+                String value = keyValue.split(":")[1].trim();
+                if(value.startsWith("{") && value.endsWith("}")){
+                    res.put(key, readAsMap(value));
+                } else if (value.startsWith("[") && value.endsWith("]")) {
+                    res.put(key, readAsArray(value));
+                }else if(value.startsWith("\"") && value.endsWith("\"")){
+                    res.put(key, value.replaceAll("\"", ""));
+                }else {
+                    res.put(key, value);
+                }
+            }
+            return res;
+        }
+        private static List<Object> readAsArray(String s) {
+            List<Object> res = new ArrayList<>();
+            String[] split = s.trim().split(",");
+            Pattern DIGIT = Pattern.compile("\\d+");
+            for(String item : split){
+                if(item.startsWith("\"") && item.endsWith("\"")){ // 문자열
+                    res.add(item.replaceAll("\"",""));
+                }else if(DIGIT.matcher(item).matches()){
+                    res.add(Integer.parseInt(item));
+                }else{
+                    res.add(item);
+                }
+            }
+            return res;
         }
     }
 

@@ -20,6 +20,13 @@ public class WiseSaying {
         this.author = author;
     }
 
+    public static WiseSaying fromMap(Map<String, Object> readAsMap) {
+        return new WiseSaying(
+                Long.parseLong((String) readAsMap.get("id")),
+                (String) readAsMap.get("content"),
+                (String) readAsMap.get("author"));
+    }
+
     public void setId(long id) {
         this.id = id;
     }

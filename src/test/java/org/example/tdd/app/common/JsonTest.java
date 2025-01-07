@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
@@ -15,9 +16,10 @@ public class JsonTest {
 
     @BeforeEach
     void setUp() {
-        if(Files.exists(Path.of("test")))
+        if (Files.exists(Path.of("test")))
             Util.File.deleteDir("test");
     }
+
     @Test
     @DisplayName("속성이 2개, 숫자 포함")
     void t6() {
@@ -52,5 +54,40 @@ public class JsonTest {
                         \t"content" : "content1",
                         \t"author" : "author1"
                         }""");
+    }
+
+    @Test
+    @DisplayName("json을 map으로 변환")
+    void t8() {
+        String json = """
+                {
+                \t"id" : "1",
+                \t"content" : {
+                \t\t"mycontent1" : "hi",
+                \t\t"mycontent2" : "hello",
+                \t},
+                \t"author" : "author1"
+                }""";
+        Map<String, Object> stringObjectMap = Util.Json.readAsMap(json);
+        System.out.println("stringObjectMap = " + stringObjectMap);
+
+    }
+    @Test
+    @DisplayName("json file을 map으로 변환 -> wisesaying으로 변환")
+    void t9() throws IOException {
+        WiseSaying wiseSaying = new WiseSaying(1L, "content1", "author1");
+        LinkedHashMap<String, Object> map = wiseSaying.toMap();
+
+        Util.File.createDir("test");
+        String fileName = "test/%d.json".formatted(wiseSaying.getId());
+        Util.Json.writeAsMap(fileName, map);
+
+        Map<String, Object> readAsMap = Util.Json.readAsMap(Util.File.readAsString(fileName));
+
+        WiseSaying fromMap = WiseSaying.fromMap(readAsMap);
+
+        Assertions.assertThat(fromMap.getId()).isEqualTo(wiseSaying.getId());
+        Assertions.assertThat(fromMap.getContent()).isEqualTo("content1");
+        Assertions.assertThat(fromMap.getAuthor()).isEqualTo("author1");
     }
 }
