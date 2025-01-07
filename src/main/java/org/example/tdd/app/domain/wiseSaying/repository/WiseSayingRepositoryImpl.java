@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.example.tdd.app.App.BASE_PATH;
@@ -36,10 +37,10 @@ public class WiseSayingRepositoryImpl implements WiseSayingRepository {
     }
 
     @Override
-    public WiseSaying findById(long id) {
+    public Optional<WiseSaying> findById(long id) {
         if(!existsById(id))
             throw new EntityNotFoundException(id+"번 명언은 존재하지 않습니다.");
-        return Util.File.deserialize(BASE_PATH +"/"+ id + ".json");
+        return Optional.ofNullable(Util.File.deserialize(BASE_PATH + "/" + id + ".json"));
     }
 
     @Override

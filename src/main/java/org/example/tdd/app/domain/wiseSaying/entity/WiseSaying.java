@@ -56,4 +56,15 @@ public class WiseSaying {
         map.put("author", author);
         return map;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof WiseSaying that)) return false;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

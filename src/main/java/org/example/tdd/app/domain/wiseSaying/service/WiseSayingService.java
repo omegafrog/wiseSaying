@@ -28,7 +28,7 @@ public class WiseSayingService {
         repository.deleteById(id);
     }
     public WiseSaying getItem(long id){
-        return repository.findById(id);
+        return repository.findById(id).get();
     }
 
     public void update(long id, WiseSaying wiseSaying) {

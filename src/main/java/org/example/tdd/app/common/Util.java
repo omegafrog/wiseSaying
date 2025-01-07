@@ -5,11 +5,9 @@ import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static org.example.tdd.app.App.BASE_PATH;
 
@@ -18,7 +16,10 @@ public class Util {
         public static String readAsString(String path) {
             try {
                 return Files.readString(Path.of(path));
-            } catch (IOException e) {
+            }catch (NoSuchFileException e){
+                return "";
+            }
+            catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -101,6 +102,14 @@ public class Util {
                 throw new IllegalArgumentException(e);
             }
         }
+
+        public static List<Path> getPaths(String basePath) {
+            try(Stream<Path> paths = Files.list(Path.of(basePath))){
+                return paths.toList();
+            }catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static class Json{
@@ -121,6 +130,9 @@ public class Util {
         }
 
         public static Map<String, Object> readAsMap(String s) {
+            if (s.isEmpty()) {
+                return new HashMap<>();
+            }
             Map<String, Object> res = new LinkedHashMap<>();
             s = s.substring(1, s.length() - 1).trim();
 

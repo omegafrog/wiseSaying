@@ -2,14 +2,16 @@ package org.example.tdd.app.domain.wiseSaying.service;
 
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 public interface WiseSayingRepository {
 
 
     WiseSaying insert(WiseSaying wiseSaying);
 
-    WiseSaying findById(long id);
+    Optional<WiseSaying> findById(long id);
 
     List<WiseSaying> findAll();
 
