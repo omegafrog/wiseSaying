@@ -13,6 +13,10 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation("org.assertj:assertj-core:3.26.3")
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.36'
+
+    annotationProcessor('org.projectlombok:lombok:1.18.36')
 }
 
 test {
