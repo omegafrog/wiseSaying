@@ -1,5 +1,9 @@
 package org.example.tdd.app.domain.wiseSaying.entity;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+
 public class WiseSaying {
     private long id;
     private String content;
@@ -36,5 +40,13 @@ public class WiseSaying {
         this.content = changedContent;
         this.author = changedAuthor;
         return this;
+    }
+
+    public LinkedHashMap<String, Object> toMap() {
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        map.put("id", id);
+        map.put("content", content);
+        map.put("author", author);
+        return map;
     }
 }

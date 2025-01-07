@@ -5,6 +5,7 @@ import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.example.tdd.app.App.BASE_PATH;
@@ -19,7 +20,7 @@ public class Util {
             }
         }
 
-        public static void writeAsString(String path, String content, OpenOption... options) {
+        public static void write(String path, String content, OpenOption... options) {
             try {
                 Files.writeString(Path.of(path), content, options);
             } catch (IOException e) {
@@ -110,6 +111,10 @@ public class Util {
             builder.delete(builder.length() - 2, builder.length()-1);
             builder.append("}");
             return builder.toString();
+        }
+
+        public static void writeAsMap(String fileName, LinkedHashMap<String, Object> map) {
+            File.write(fileName, mapToJson(map));
         }
     }
 

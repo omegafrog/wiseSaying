@@ -19,7 +19,7 @@ class FileTest {
     @Test
     @DisplayName("파일 작성")
     void t1() {
-        Util.File.writeAsString("test.txt", "test", StandardOpenOption.CREATE_NEW);
+        Util.File.write("test.txt", "test", StandardOpenOption.CREATE_NEW);
 
         Assertions.assertThat(Util.File.readAsString("test.txt")).isEqualTo("test");
     }
@@ -27,22 +27,22 @@ class FileTest {
     @Test
     @DisplayName("파일 수정")
     void t2() {
-        Util.File.writeAsString("test.txt", "test", StandardOpenOption.CREATE_NEW);
-        Util.File.writeAsString("test.txt", "test2", StandardOpenOption.WRITE);
+        Util.File.write("test.txt", "test", StandardOpenOption.CREATE_NEW);
+        Util.File.write("test.txt", "test2", StandardOpenOption.WRITE);
         Assertions.assertThat(Util.File.readAsString("test.txt")).isEqualTo("test2");
     }
 
     @Test
     @DisplayName("파일 조회")
     void t3() {
-        Util.File.writeAsString("test.txt", "test", StandardOpenOption.CREATE_NEW);
+        Util.File.write("test.txt", "test", StandardOpenOption.CREATE_NEW);
         Assertions.assertThat(Util.File.readAsString("test.txt")).isEqualTo("test");
 
     }
     @Test
     @DisplayName("파일 삭제")
     void t4(){
-        Util.File.writeAsString("test.txt", "test", StandardOpenOption.CREATE_NEW);
+        Util.File.write("test.txt", "test", StandardOpenOption.CREATE_NEW);
         Util.File.deleteFile("test.txt");
 
         Assertions.assertThat(Files.exists(Path.of("test.txt"))).isFalse();
@@ -51,7 +51,7 @@ class FileTest {
     @DisplayName("디렉토리 삭제")
     void t5(){
         Util.File.createDir("test");
-        Util.File.writeAsString("test/test.txt", "test", StandardOpenOption.CREATE_NEW);
+        Util.File.write("test/test.txt", "test", StandardOpenOption.CREATE_NEW);
         Util.File.deleteDir("test");
 
         Assertions.assertThat(Files.exists(Path.of("test"))).isFalse();
