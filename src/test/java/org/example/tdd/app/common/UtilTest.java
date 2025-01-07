@@ -50,4 +50,13 @@ class UtilTest {
 
         Assertions.assertThat(Files.exists(Path.of("test.txt"))).isFalse();
     }
+    @Test
+    @DisplayName("디렉토리 삭제")
+    void t5(){
+        Util.File.createDir("test");
+        Util.File.writeAsString("test/test.txt", "test", StandardOpenOption.CREATE_NEW);
+        Util.File.deleteDir("test");
+
+        Assertions.assertThat(Files.exists(Path.of("test"))).isFalse();
+    }
 }

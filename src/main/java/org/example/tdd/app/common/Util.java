@@ -5,10 +5,9 @@ import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import java.io.*;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileAttribute;
 
 import static org.example.tdd.app.App.BASE_PATH;
 
@@ -24,6 +23,32 @@ public class Util {
         public static void writeAsString(String path, String content, OpenOption... options){
             try {
                 Files.writeString(Path.of(path), content, options);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        public static void deleteDir(String path){
+            try{
+                Files.walkFileTree(Path.of(path), new SimpleFileVisitor<>() {
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        Files.delete(file); // 파일 삭제
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                        Files.delete(dir); // 디렉토리 삭제
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        public static void createDir(String path){
+            try{
+                Files.createDirectory(Path.of(path));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
