@@ -49,7 +49,7 @@ public class WiseSaying {
         return this;
     }
 
-    public LinkedHashMap<String, Object> toMap() {
+    public Map<String, Object> toMap() {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         map.put("id", id);
         map.put("content", content);

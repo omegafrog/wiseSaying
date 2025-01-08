@@ -129,7 +129,7 @@ public class Util {
             return builder.toString();
         }
 
-        public static void writeAsMap(String fileName, LinkedHashMap<String, Object> map) {
+        public static void writeAsMap(String fileName, Map<String, Object> map) {
             File.write(fileName, mapToJson(map));
         }
 
@@ -191,6 +191,21 @@ public class Util {
                 }
             }
             return res;
+        }
+
+        public static String listToJson(List<Map<String, Object>> wiseSayingList) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("[").append("\n");
+            for (Map<String, Object> wiseSaying : wiseSayingList) {
+                builder.append("\t");
+                builder.append(mapToJson(wiseSaying).replaceAll("\n", "\n\t"));
+                builder.append(",\n");
+            }
+            if(builder.length()>2){
+                builder.delete(builder.length() - 2, builder.length()-1);
+            }
+            builder.append("]");
+            return builder.toString();
         }
     }
 

@@ -2,6 +2,7 @@ package org.example.tdd.app.common;
 
 import org.assertj.core.api.Assertions;
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ public class JsonTest {
     @DisplayName("wisesaying을 map으로 변환 -> json file으로 변환")
     void t7() {
         WiseSaying wiseSaying = new WiseSaying(1L, "content1", "author1");
-        LinkedHashMap<String, Object> map = wiseSaying.toMap();
+        Map<String, Object> map = wiseSaying.toMap();
 
         Util.File.createDir("test");
         String fileName = "test/%d.json".formatted(wiseSaying.getId());
@@ -84,7 +85,7 @@ public class JsonTest {
     @DisplayName("json file을 map으로 변환 -> wisesaying으로 변환")
     void t9() throws IOException {
         WiseSaying wiseSaying = new WiseSaying(1L, "content1", "author1");
-        LinkedHashMap<String, Object> map = wiseSaying.toMap();
+        Map<String, Object> map = wiseSaying.toMap();
 
         Util.File.createDir("test");
         String fileName = "test/%d.json".formatted(wiseSaying.getId());
@@ -97,5 +98,31 @@ public class JsonTest {
         Assertions.assertThat(fromMap.getId()).isEqualTo(wiseSaying.getId());
         Assertions.assertThat(fromMap.getContent()).isEqualTo("content1");
         Assertions.assertThat(fromMap.getAuthor()).isEqualTo("author1");
+    }
+
+    @Test
+    @DisplayName("wisesaying list를 json file로 변환")
+    void t10() {
+        WiseSaying wiseSaying1 = new WiseSaying(1L, "content1", "author1");
+        WiseSaying wiseSaying2 = new WiseSaying(2L, "content2", "author2");
+
+        List<Map<String, Object>> wiseSayingList = Stream.of(wiseSaying1, wiseSaying2)
+                .map(WiseSaying::toMap).toList();
+
+        String s = Util.Json.listToJson(wiseSayingList);
+
+        Assertions.assertThat(s).isEqualTo("""
+                [
+                \t{
+                \t\t"id" : "1",
+                \t\t"content" : "content1",
+                \t\t"author" : "author1"
+                \t},
+                \t{
+                \t\t"id" : "2",
+                \t\t"content" : "content2",
+                \t\t"author" : "author2"
+                \t}
+                ]""");
     }
 }
