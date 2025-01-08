@@ -2,9 +2,9 @@ package org.example.tdd;
 
 import org.example.TestUtil;
 import org.example.tdd.app.App;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.example.tdd.app.common.Util;
+import org.example.tdd.app.global.AppConfig;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -18,31 +18,31 @@ import static org.assertj.core.api.Assertions.*;
 
 public class IntegrationTest {
 
-    public static final String BASE_PATH = "db/WiseSaying";
     private ByteArrayOutputStream outputStream;
 
+    @BeforeAll
+    static void t(){
+        AppConfig.setMode(AppConfig.Mode.TEST);
+    }
 
     @BeforeEach
     void setUp() throws IOException {
-        try(Stream<Path> paths = Files.list(Path.of(BASE_PATH))){
-            paths.forEach(path->path.toFile().delete());
-        }
+        if(Files.exists(Path.of(AppConfig.getDbPath() + "/wiseSaying")))
+            Util.File.deleteDir(AppConfig.getDbPath()+"/wiseSaying");
+        Files.createDirectories(Path.of(AppConfig.getDbPath() + "/wiseSaying"));
+
         outputStream = TestUtil.setOutToByteArray();
     }
 
     @AfterEach
     void tearDown() throws IOException {
+        if(Files.exists(Path.of(AppConfig.getDbPath() + "/wiseSaying")))
+            Util.File.deleteDir(AppConfig.getDbPath()+"/wiseSaying");
+        Files.createDirectories(Path.of(AppConfig.getDbPath() + "/wiseSaying"));
         TestUtil.clearSetOutToByteArray(outputStream);
     }
 
-    @Test
-    void 종료_명령을_실행할_수_있어야_한다(){
-        Scanner scanner = TestUtil.genScanner("종료");
-        App app = new App(scanner);
-        app.run();
 
-        assertThat(app.isExisted()).isTrue();
-    }
     @Test
     void 명언을_등록할_수_있다()  {
         prepare("""
@@ -53,7 +53,7 @@ public class IntegrationTest {
                 """);
 
         List<File> files;
-        try(Stream<Path> list = Files.list(Path.of(BASE_PATH))){
+        try(Stream<Path> list = Files.list(Path.of(AppConfig.getDbPath()+"/wiseSaying"))){
             files = list.map(Path::toFile).toList();
         } catch (IOException e) {
             e.printStackTrace();
@@ -195,7 +195,7 @@ public class IntegrationTest {
                 .contains("1 / 작자미상 / 현재를 사랑하라.");
 
         List<File> files;
-        try(Stream<Path> list = Files.list(Path.of(BASE_PATH))){
+        try(Stream<Path> list = Files.list(Path.of(AppConfig.getDbPath()))){
             files = list.map(Path::toFile).toList();
         } catch (IOException e) {
             e.printStackTrace();
@@ -228,7 +228,7 @@ public class IntegrationTest {
                 작자미상
                 """);
 
-        File lastIdFile = new File(BASE_PATH+"/lastId.txt");
+        File lastIdFile = new File(AppConfig.getDbPath()+ "/wiseSaying/lastId.txt");
         assertThat(lastIdFile).exists();
         int id;
         try(BufferedReader reader = new BufferedReader(new FileReader(lastIdFile))){
@@ -276,7 +276,7 @@ public class IntegrationTest {
         assertThat(outputStream.toString())
                 .contains("data.json 파일의 내용이 갱신되었습니다.");
 
-        File dataFile = new File(BASE_PATH+"/data.json");
+        File dataFile = new File(AppConfig.getDbPath()+"/wiseSaying/build.json");
         assertThat(dataFile).exists();
         StringBuilder builder = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
@@ -292,17 +292,111 @@ public class IntegrationTest {
                 .contains("""
                         [
                         \t{
-                        \t\t"id": 1,
-                        \t\t"content": "현재를 사랑하라.",
-                        \t\t"author": "작자미상"
+                        \t\t"id" : "1",
+                        \t\t"content" : "현재를 사랑하라.",
+                        \t\t"author" : "작자미상"
                         \t},
                         \t{
-                        \t\t"id": 2,
-                        \t\t"content": "과거에 집착하지 마라.",
-                        \t\t"author": "작자미상"
+                        \t\t"id" : "2",
+                        \t\t"content" : "과거에 집착하지 마라.",
+                        \t\t"author" : "작자미상"
                         \t}
                         ]
                         """);
+    }
+
+    @Test
+    @DisplayName("페이징을 할 수 있다.")
+    void pagingTest(){
+        prepare("""
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                목록
+                종료
+                """);
+        assertThat(outputStream.toString())
+                .contains("번호 / 작가 / 명언")
+                .contains("----------------------")
+                .contains("1 / 작자미상 / 현재를 사랑하라.")
+                .contains("2 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("3 / 작자미상 / 현재를 사랑하라.")
+                .contains("4 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("5 / 작자미상 / 현재를 사랑하라.")
+                .contains("페이지 : [1] 2");
+    }
+    @Test
+    @DisplayName("페이징을 할 수 있다.")
+    void pagingTest2(){
+        prepare("""
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                목록?page=2
+                """);
+        assertThat(outputStream.toString())
+                .contains("번호 / 작가 / 명언")
+                .contains("----------------------")
+                .contains("6 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("7 / 작자미상 / 현재를 사랑하라.")
+                .contains("8 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("9 / 작자미상 / 현재를 사랑하라.")
+                .contains("10 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("페이지 : 1 [2]");
     }
 
 

@@ -28,6 +28,10 @@ public class App {
     public void run(){
         System.out.println("== 명언 앱 == ");
         while(true){
+            if(isExisted()){
+                systemController.setExit(false);
+                return;
+            }
             System.out.print("명령) ");
             if(!scanner.hasNext()){
                 System.out.flush();

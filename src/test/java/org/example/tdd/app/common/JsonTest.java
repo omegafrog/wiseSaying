@@ -10,12 +10,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class JsonTest {
 
     @BeforeEach
     void setUp() {
+        if (Files.exists(Path.of("test")))
+            Util.File.deleteDir("test");
+    }
+
+    @AfterEach
+    void tearDown() {
         if (Files.exists(Path.of("test")))
             Util.File.deleteDir("test");
     }

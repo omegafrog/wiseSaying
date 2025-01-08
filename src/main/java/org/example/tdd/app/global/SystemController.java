@@ -6,7 +6,7 @@ public class SystemController{
     public static SystemController getInstance(){
         return INSTANCE;
     }
-    private static boolean isExited = false;
+    private boolean isExited = false;
 
     public boolean isExited() {
         return isExited;
@@ -16,5 +16,9 @@ public class SystemController{
     public void exit() {
         isExited = true;
         System.out.flush();
+    }
+
+    public void setExit(boolean b) {
+        isExited = b;
     }
 }

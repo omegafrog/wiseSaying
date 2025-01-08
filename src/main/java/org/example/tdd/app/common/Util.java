@@ -110,6 +110,10 @@ public class Util {
                 throw new RuntimeException(e);
             }
         }
+
+        public static boolean isExist(String fileName) {
+            return Files.exists(Path.of(fileName));
+        }
     }
 
     public static class Json{

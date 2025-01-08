@@ -24,7 +24,7 @@ public class WiseSayingService {
         return repository.findAll();
     }
 
-    public void delete(long id){
+    public void delete(long id) {
         repository.deleteById(id);
     }
     public WiseSaying getItem(long id){

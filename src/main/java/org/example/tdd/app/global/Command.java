@@ -2,13 +2,11 @@ package org.example.tdd.app.global;
 
 import org.example.tdd.app.domain.wiseSaying.controller.WiseSayingController;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.example.tdd.app.global.Parameters.*;
-import static org.example.tdd.app.global.Parameters.PARAMETER_VALUE_SPLITTER;
 
 enum Command {
     EXIT("종료") {
@@ -23,11 +21,7 @@ enum Command {
     },
     LIST("목록") {
         public void route(Parameters parameters) {
-            if (parameters.containsSearchParams()) {
-                WiseSayingController.getInstance().list(parameters);
-                return;
-            }
-            WiseSayingController.getInstance().list();
+            WiseSayingController.getInstance().list(parameters);
         }
     },
     DELETE("삭제") {
@@ -52,7 +46,7 @@ enum Command {
 
     private final String name;
 
-    public abstract void route(Parameters parameters);
+    public abstract void route(Parameters parameters) throws RuntimeException;
 
     private static final Map<String, Command> COMMAND_MAP;
 
