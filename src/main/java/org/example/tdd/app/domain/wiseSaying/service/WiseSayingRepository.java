@@ -1,13 +1,12 @@
 package org.example.tdd.app.domain.wiseSaying.service;
 
+import org.example.nonTdd.Page;
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 public interface WiseSayingRepository {
-
 
     WiseSaying insert(WiseSaying wiseSaying);
 
@@ -15,7 +14,7 @@ public interface WiseSayingRepository {
 
     List<WiseSaying> findAll();
 
-    void deleteById(long id);
+    void deleteById(long id) ;
 
     WiseSaying update(long id, WiseSaying wiseSaying);
 
@@ -24,4 +23,6 @@ public interface WiseSayingRepository {
     void build();
 
     List<WiseSaying> findByPage(String keywordType, String keyword, int pageNum);
+
+    Page<WiseSaying> findAllByPage(int pageNum);
 }

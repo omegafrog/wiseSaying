@@ -1,7 +1,8 @@
 package org.example.tdd.app.domain.wiseSaying.service;
 
+import org.example.nonTdd.Page;
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
-import org.example.tdd.app.domain.wiseSaying.repository.WiseSayingRepositoryImpl;
+import org.example.tdd.app.domain.wiseSaying.repository.WiseSayingProvider;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class WiseSayingService {
         return INSTANCE;
     }
 
-    private final WiseSayingRepository repository = WiseSayingRepositoryImpl.getInstance();
+    private final WiseSayingRepository repository = WiseSayingProvider.provide();
 
     public WiseSaying create(String content, String author) {
         return repository.insert(new WiseSaying(content, author));
@@ -41,5 +42,9 @@ public class WiseSayingService {
 
     public List<WiseSaying> search(String keywordType, String keyword, int pageNum) {
         return repository.findByPage(keywordType,keyword,pageNum);
+    }
+
+    public Page<WiseSaying> listPage(int pageNum) {
+        return repository.findAllByPage(pageNum);
     }
 }

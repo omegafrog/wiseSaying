@@ -1,6 +1,7 @@
 package org.example.tdd.app.domain.wiseSaying.controller;
 
 
+import org.example.nonTdd.Page;
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import org.example.tdd.app.domain.wiseSaying.service.WiseSayingService;
 import org.example.tdd.app.global.Parameters;
@@ -35,13 +36,19 @@ public class WiseSayingController{
         System.out.println(saved.getId() + "번 명언이 등록되었습니다.");
     }
 
-    public void list() {
-        printResult(service.findAll());
-    }
+//    public void list() {
+////        printResult(service.findAll());
+//        printResult(service.listPage(1));
+//    }
     public void list(Parameters parameters){
-        List<WiseSaying> wiseSayingList = service.search(parameters.getKeywordType(),
-                parameters.getKeyword(), parameters.getPageNum());
-        printResult(wiseSayingList);
+        if(parameters.containsSearchParams()){
+            List<WiseSaying> wiseSayingList = service.search(parameters.getKeywordType(),
+                    parameters.getKeyword(), parameters.getPageNum());
+            printResult(wiseSayingList);
+        }else{
+            printResult(service.listPage(parameters.getPageNum()));
+        }
+
     }
 
     private static void printResult(List<WiseSaying> all) {
@@ -50,7 +57,14 @@ public class WiseSayingController{
 
         for (WiseSaying ws : all)
             System.out.println(ws.getId()+" / "+ws.getAuthor()+" / "+ws.getContent());
-//        System.out.println(page);
+    }
+    private static void printResult(Page<WiseSaying> page) {
+        System.out.println("번호 / 작가 / 명언");
+        System.out.println("----------------------");
+
+        for (WiseSaying ws : page.getContents())
+            System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent());
+        System.out.println(page);
     }
 
     public void delete(Parameters parameters) {

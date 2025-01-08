@@ -65,7 +65,7 @@ public class WiseSayingController {
             Page founded = service.findByPage(keywordType, keyword, pageNum);
             printResult(founded);
         }
-    private static void printResult(Page page) {
+    private static void printResult(Page<WiseSaying> page) {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
 

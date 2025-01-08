@@ -2,33 +2,34 @@ package org.example.nonTdd;
 
 import java.util.List;
 
-public class Page {
+public class Page<T> {
 
-    private final List<WiseSaying> contents;
+    private final List<T> contents;
     private final int pageSize;
     private final int totalElementCount;
     private final int pageNum;
     private final int totalPage;
 
-    public Page(List<WiseSaying> contents, int totalElementCount, int pageSize, int pageNum) {
+    public Page(List<T> contents, int totalElementCount, int pageSize, int pageNum) {
         this.totalElementCount = totalElementCount;
         this.pageSize = pageSize;
-        this.contents = contents;
+        int fromIdx = (pageNum-1)*pageSize;
+        int toIdx = Math.min((pageNum) * pageSize, totalElementCount);
+        this.contents = contents.subList(fromIdx, toIdx);
+
         if(totalElementCount > pageSize){
-            if(totalElementCount % pageSize >0){
+            if(totalElementCount % pageSize >0)
                 this.totalPage = totalElementCount / pageSize + 1;
-            }
-            else{
+            else
                 this.totalPage = totalElementCount / pageSize;
-            }
-        }else{
-            this.totalPage = 1;
         }
+        else
+            this.totalPage = 1;
         this.pageNum = pageNum;
 
     }
 
-    public List<WiseSaying> getContents() {
+    public List<T> getContents() {
         return contents;
     }
 

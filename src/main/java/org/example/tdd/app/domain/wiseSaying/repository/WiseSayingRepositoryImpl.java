@@ -1,5 +1,6 @@
 package org.example.tdd.app.domain.wiseSaying.repository;
 
+import org.example.nonTdd.Page;
 import org.example.tdd.app.common.Util;
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import org.example.tdd.app.common.exception.EntityNotFoundException;
@@ -93,6 +94,12 @@ public class WiseSayingRepositoryImpl implements WiseSayingRepository {
         int toIdx = Math.min((pageNum) * 5,list.size());
 
         return list.subList(fromIdx, toIdx);
+    }
+
+    @Override
+    public Page<WiseSaying> findAllByPage(int pageNum) {
+        List<WiseSaying> all = findAll();
+        return new Page<>(all, all.size(), 5, pageNum);
     }
 
     @Override
