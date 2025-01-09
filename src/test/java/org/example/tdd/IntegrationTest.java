@@ -399,7 +399,6 @@ public class IntegrationTest {
                 .contains("페이지 : 1 [2]");
     }
 
-
     private static void prepare(String input){
         Scanner scanner = TestUtil.genScanner(input);
         App app = new App(scanner);
