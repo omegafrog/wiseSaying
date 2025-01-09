@@ -195,7 +195,7 @@ public class IntegrationTest {
                 .contains("1 / 작자미상 / 현재를 사랑하라.");
 
         List<File> files;
-        try(Stream<Path> list = Files.list(Path.of(AppConfig.getDbPath()))){
+        try(Stream<Path> list = Files.list(Path.of(AppConfig.getDbPath()+"/wiseSaying"))){
             files = list.map(Path::toFile).toList();
         } catch (IOException e) {
             e.printStackTrace();
@@ -345,11 +345,11 @@ public class IntegrationTest {
         assertThat(outputStream.toString())
                 .contains("번호 / 작가 / 명언")
                 .contains("----------------------")
-                .contains("1 / 작자미상 / 현재를 사랑하라.")
-                .contains("2 / 작자미상 / 과거에 집착하지 마라.")
-                .contains("3 / 작자미상 / 현재를 사랑하라.")
-                .contains("4 / 작자미상 / 과거에 집착하지 마라.")
-                .contains("5 / 작자미상 / 현재를 사랑하라.")
+                .contains("10 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("9 / 작자미상 / 현재를 사랑하라.")
+                .contains("8 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("7 / 작자미상 / 현재를 사랑하라.")
+                .contains("6 / 작자미상 / 과거에 집착하지 마라.")
                 .contains("페이지 : [1] 2");
     }
     @Test
@@ -391,11 +391,11 @@ public class IntegrationTest {
         assertThat(outputStream.toString())
                 .contains("번호 / 작가 / 명언")
                 .contains("----------------------")
-                .contains("6 / 작자미상 / 과거에 집착하지 마라.")
-                .contains("7 / 작자미상 / 현재를 사랑하라.")
-                .contains("8 / 작자미상 / 과거에 집착하지 마라.")
-                .contains("9 / 작자미상 / 현재를 사랑하라.")
-                .contains("10 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("5 / 작자미상 / 현재를 사랑하라.")
+                .contains("4 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("3 / 작자미상 / 현재를 사랑하라.")
+                .contains("2 / 작자미상 / 과거에 집착하지 마라.")
+                .contains("1 / 작자미상 / 현재를 사랑하라.")
                 .contains("페이지 : 1 [2]");
     }
 

@@ -65,7 +65,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         }
         return res;
     }
-
+    
     @Override
     public void deleteById(long id) throws EntityNotFoundException {
         String fileName = getFilePath(id);
@@ -76,6 +76,13 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     @Override
     public WiseSaying update(long id, WiseSaying wiseSaying) {
+        Optional<WiseSaying> byId = findById(id);
+        if(byId.isPresent()) {
+            WiseSaying update = byId.get().update(wiseSaying.getContent(), wiseSaying.getAuthor());
+            String s = Util.Json.mapToJson(update.toMap());
+            Util.File.write(getFilePath(id), s, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+            return update;
+        }
         return null;
     }
 
@@ -118,10 +125,9 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         all.sort(new Comparator<WiseSaying>() {
             @Override
             public int compare(WiseSaying o1, WiseSaying o2) {
-                return Long.compare(o1.getId(), o2.getId());
+                return -1*Long.compare(o1.getId(), o2.getId());
             }
         });
-
         return new Page<>(all, (int) count(), 5, pageNum);
     }
     public long count()  {

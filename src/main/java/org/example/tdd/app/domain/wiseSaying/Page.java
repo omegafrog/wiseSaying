@@ -1,4 +1,4 @@
-package org.example.nonTdd;
+package org.example.tdd.app.domain.wiseSaying;
 
 import java.util.List;
 
@@ -13,10 +13,9 @@ public class Page<T> {
     public Page(List<T> contents, int totalElementCount, int pageSize, int pageNum) {
         this.totalElementCount = totalElementCount;
         this.pageSize = pageSize;
-        this.contents = contents.stream()
-                .skip((long) (pageNum - 1) *pageSize)
-                .limit(pageSize)
-                .toList();
+        int fromIdx = (pageNum-1)*pageSize;
+        int toIdx = Math.min((pageNum) * pageSize, totalElementCount);
+        this.contents = contents.subList(fromIdx, toIdx);
 
         if(totalElementCount > pageSize){
             if(totalElementCount % pageSize >0)

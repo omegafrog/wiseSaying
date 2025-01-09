@@ -1,6 +1,7 @@
 package org.example.tdd.app.domain.wiseSaying.service;
 
 import org.example.nonTdd.Page;
+import org.example.tdd.app.common.exception.EntityNotFoundException;
 import org.example.tdd.app.domain.wiseSaying.entity.WiseSaying;
 import org.example.tdd.app.domain.wiseSaying.repository.WiseSayingProvider;
 
@@ -29,7 +30,7 @@ public class WiseSayingService {
         repository.deleteById(id);
     }
     public WiseSaying getItem(long id){
-        return repository.findById(id).get();
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "번 명언은 존재하지 않습니다."));
     }
 
     public void update(long id, WiseSaying wiseSaying) {
